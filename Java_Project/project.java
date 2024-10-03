@@ -1,7 +1,6 @@
 package Java_Project;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -42,7 +41,35 @@ public class project {
 
     public static void main(String[] args) {
         project pb = new project();
+        pb.importContactsFromFile(); // Import contacts from file on startup
         pb.run();
+    }
+
+    // New Method: Import Contacts from File
+    private void importContactsFromFile() {
+        try (Scanner fileScanner = new Scanner(new File("contacts.txt"))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] contactDetails = line.split(",");
+                if (contactDetails.length == 2) {
+                    String name = contactDetails[0].trim();
+                    String phone = contactDetails[1].trim();
+                    phoneBook.add(new Contact(name, phone));
+                }
+            }
+            System.out.println("Contacts imported from contacts.txt.");
+        } catch (FileNotFoundException e) {
+            System.out.println("No existing contacts file found.");
+        }
+    }
+
+    private void addContact() {
+        System.out.print("Enter name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter phone number: ");
+        String phone = scanner.nextLine();
+        phoneBook.add(new Contact(name, phone));
+        System.out.println("Contact added.");
     }
 
     public void run() {
@@ -86,15 +113,6 @@ public class project {
                     System.out.println("Invalid choice.");
             }
         }
-    }
-
-    private void addContact() {
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine();
-        System.out.print("Enter phone number: ");
-        String phone = scanner.nextLine();
-        phoneBook.add(new Contact(name, phone));
-        System.out.println("Contact added.");
     }
 
     private void listContacts() {
@@ -154,7 +172,7 @@ public class project {
     private void exportContactsToFile() {
         try (FileWriter writer = new FileWriter("contacts.txt")) {
             for (Contact contact : phoneBook) {
-                writer.write(contact + "\n");
+                writer.write(contact.getName() + ", " + contact.getPhoneNumber() + "\n");
             }
             System.out.println("Contacts exported to contacts.txt.");
         } catch (IOException e) {
