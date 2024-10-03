@@ -1,5 +1,7 @@
-package sorting;
+package Java_Project;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -52,7 +54,8 @@ public class project {
             System.out.println("3. Modify Contact");
             System.out.println("4. Search Contact");
             System.out.println("5. Delete Contact");
-            System.out.println("6. Exit");
+            System.out.println("6. Export Contacts to File");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -74,6 +77,9 @@ public class project {
                     deleteContact();
                     break;
                 case 6:
+                    exportContactsToFile();
+                    break;
+                case 7:
                     exit = true;
                     break;
                 default:
@@ -142,6 +148,17 @@ public class project {
             System.out.println("Contact deleted.");
         } else {
             System.out.println("Invalid contact number.");
+        }
+    }
+
+    private void exportContactsToFile() {
+        try (FileWriter writer = new FileWriter("contacts.txt")) {
+            for (Contact contact : phoneBook) {
+                writer.write(contact + "\n");
+            }
+            System.out.println("Contacts exported to contacts.txt.");
+        } catch (IOException e) {
+            System.out.println("Error exporting contacts: " + e.getMessage());
         }
     }
 }
